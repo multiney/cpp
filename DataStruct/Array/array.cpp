@@ -1,8 +1,10 @@
 #include <malloc.h>
 
 #include <vector>
+#include <string>
 
 using std::vector;
+using std::string;
 
 /*
  * 704==================================================================
@@ -134,3 +136,103 @@ bool isPerfectSquare2(int num) {
  * 704------------------------------------------------------------------------------
  * =================================================================================
  */
+
+/*
+ * 27=========================================
+ * -------------------------------------------
+ */
+/*
+ * 27. Remove Element
+ */
+int removeElement(vector<int> &nums, int val) {
+    int slow = 0;
+    for (int fast = 0; fast < nums.size(); ++fast)
+        if (nums[fast] != val)
+            nums[slow++] = nums[fast];
+    return slow;
+}
+int removeElement2(vector<int> &nums, int val) {
+    int left = 0, right = nums.size() - 1;
+    while (left <= right) {
+        while (left <= right && nums[left] != val)
+            ++left;
+        while (left <= right && nums[right] == val)
+            --right;
+        if (left < right)
+            nums[left++] = nums[right--];
+    }
+    return left;
+}
+
+/*
+ * 26. Remove Duplicates from Sorted array
+ *
+ * Constraints: 1 <= nums.length <= 3 * 10^4
+ */
+int removeDuplicates(vector<int> &nums) {
+    int slow = 0;
+    for (int fast = 1; fast < nums.size(); ++fast)
+        if (nums[slow] != nums[fast])
+            nums[++slow] = nums[fast];
+    return slow + 1;
+}
+int removeDuplicates2(vector<int> &nums) {
+    int slow = 1;
+    for (int fast = slow; fast < nums.size(); ++fast)
+        if (nums[fast] != nums[fast - 1])
+            nums[slow++] = nums[fast];
+    return slow;
+}
+int removeDuplicates3(vector<int> &nums) {
+    int count = 0;
+    for (int i = 1; i < nums.size(); ++i) {
+        if (nums[i] == nums[i - 1])
+            ++count;
+        else
+            nums[i - count] = nums[i];
+    }
+    return nums.size() - count;
+}
+
+/*
+ * 283. Move Zeroes
+ */
+void moveZeroes(vector<int> &nums) {
+    int slow = 0;
+    for (int fast = 0; fast < nums.size(); ++fast)
+        if (nums[fast] != 0)
+            nums[slow++] = nums[fast];
+    while (slow < nums.size())
+        nums[slow++] = 0;
+}
+void moveZeroes2(vector<int> &nums) {
+    int snowBallSize = 0;
+    for (int i = 0; i < nums.size(); ++i) {
+        if (nums[i] == 0)
+            ++snowBallSize;
+        else if (snowBallSize > 0) {
+            nums[i - snowBallSize] = nums[i];
+            nums[i] = 0;
+        }
+    }
+}
+
+/*
+ * 844. Backspace String Compare
+ */
+bool BackspaceCompare(string s, string t) {
+    int i = s.size() - 1, j = t.size() - 1;
+    while (i >= 0 && j >= 0) {
+        int count = 0;
+        while (i >= 0) {
+            if (s[i] == '#')
+                ++count;
+            else if (count > 0)
+                --count;
+            else if (count == 0)
+                break;
+            --i;
+        }
+        if (i == 0)
+    }
+}
