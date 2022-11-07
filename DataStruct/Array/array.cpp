@@ -412,3 +412,132 @@ int lenthOfLongestSubstring(string s) {
     }
     return ret;
 }
+
+int lengthOfLongestSubstring2(string s) {
+    vector<int> map(128, 0);
+    int ret = 0;
+    for (int i = 0, j = 0; j < s.size(); ++j) {
+        if (map[s[j]] > 0)
+            i = std::max(i, map[s[j]]);
+        ret = std::max(ret, j - i + 1);
+        map[s[j]] = j + 1;
+    }
+    return ret;
+}
+
+/*
+ * 76. Minimum Window Substring
+ */
+string minWindow(string s, string t) {
+    vector<int> map('z' + 1);
+    for (auto &c : t) ++map[c];
+    int beg = 0, end = 0, head = 0, counter = t.size(), minLen = INT_MAX;
+    while (end < s.size()) {
+        if (--map[s[end++]] >= 0) --counter;
+        if (counter == 0) {
+            while (map[s[beg]] < 0) ++map[s[beg++]];
+            if (minLen > end - beg) minLen = end - (head = beg);
+        }
+    }
+    return minLen == INT_MAX ? "" : s.substr(head, minLen);
+}
+
+char* minWindow(char *s, char *t) {
+    int map['z' + 1] = {0}, counter = 0, minLen = INT_MAX;
+    while (t[counter]) ++map[t[counter++]];
+    char *p = s, *q = s;
+    while (*q) {
+        if (--map[*q++] >= 0) --counter;
+        if (!counter) {
+            while (map[*p] < 0) ++map[*p++];
+            if (minLen > q - p) minLen = q - (s = p);
+        }
+    }
+    return (*(s + (minLen == INT_MAX ? 0 : minLen)) = 0) ? s : s;
+}
+
+/*
+ * -------------------------------------------
+ * 209=========================================
+ */
+
+/**
+ * 59. Spiral Matrix II
+ *
+ * Return an array of arrays of size *returnSize.
+ * The sizes of the arrays are returned as *returnColumnSizes array.
+ * Note: Both returned array and *columnSizes array must be malloced, assume caller calls free().
+ */
+int** generateMatrix(int n, int* returnSize, int** returnColumnSizes){
+    int **ret = (int**)malloc((*returnSize = n) * sizeof(int*));
+    *returnColumnSizes = (int*)malloc(n * sizeof(int));
+    for (int i = 0; i < n; ++i)
+        ret[i] = (int*)malloc(((*returnColumnSizes)[i] = n) * sizeof(int));
+    int k = 1, i = 0;
+    while (k <= n * n) {
+        int j = i;
+        while (j < n - i)
+            ret[i][j++] = k++;
+        j = i + 1;
+        while (j < n - i)
+            ret[j++][n - i - 1] = k++;
+        j = n - i - 2;
+        while (j > i)
+            ret[n - i - 1][j--] = k++;
+        j = n - i - 1;
+        while (j > i)
+            ret[j--][i] = k++;
+        ++i;
+    }
+    return ret;
+}
+
+/**
+ * 54. Spiral Matrix
+ *
+ * Note: The returned array must be malloced, assume caller calls free().
+ */
+int* spiralOrder(int** matrix, int matrixSize, int* matrixColSize, int* returnSize){
+    int *ret = (int*)malloc((*returnSize = *matrixColSize * matrixSize) * sizeof(int));
+    int k = 0, i = 0;
+    while (k < *returnSize) {
+        int j = i;
+        while (j < *matrixColSize - i)
+            ret[k++] = matrix[i][j++];
+        j = i + 1;
+        while (j < matrixSize - i)
+            ret[k++] = matrix[j++][*matrixColSize - i - 1];
+        j = *matrixColSize - i - 2;
+        while (j > i && k < *returnSize)
+            ret[k++] = matrix[matrixSize - i - 1][j--];
+        j = matrixSize - i - 1;
+        while (j > i && k < *returnSize)
+            ret[k++] = matrix[j--][i];
+        ++i;
+    }
+    return ret;
+}
+
+/**
+ * Note: The returned array must be malloced, assume caller calls free().
+ *
+ * no need to understand
+ */
+int* spiralOrder2(int** matrix, int matrixsize, int* matrixcolsize, int* returnsize){
+    int* ret = (int*)malloc((*returnsize = matrixsize * *matrixcolsize) * sizeof(int));
+    int dirs[4][2] = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+    int nr = matrixsize;      if (nr == 0) return ret;
+    int nc = *matrixcolsize;  if (nc == 0) return ret;
+    int nsteps[] = {nc, nr - 1};
+    int idir = 0;
+    int ir = 0, ic = -1, k = 0;
+    while (nsteps[idir & 0x01]) {
+        for (int i = 0; i < nsteps[idir & 0x01]; ++i) {
+            ir += dirs[idir][0]; ic += dirs[idir][1];
+            ret[k++] = matrix[ir][ic];
+        }
+        --nsteps[idir & 0x01];
+        idir = (idir + 1) % 4;
+    }
+    return ret;
+}
