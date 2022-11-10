@@ -5,6 +5,7 @@
 #include <cstring>
 #include <climits>
 #include <unordered_set>
+#include <unordered_map>
 
 using std::string;
 using std::vector;
@@ -159,6 +160,83 @@ vector<int> twoSum(vector<int> &nums, int target) {
     return {};
 }
 
+/*
+ * 454. 4Sum II
+ *
+ * Constraints:
+ * n == nums1.length
+ * n == nums2.length
+ * n == nums3.length
+ * n == nums4.length
+ * 1 <= n <= 200
+ * -228 <= nums1[i], nums2[i], nums3[i], nums4[i] <= 228
+ */
+int fourSumCount(vector<int>& nums1, vector<int>& nums2, vector<int>& nums3, vector<int>& nums4) {
+    std::unordered_map<int, int> sum_map;
+    for (auto i : nums1)
+        for (auto j : nums2)
+            ++sum_map[i + j];
+    int ret = 0;
+    for (auto i : nums3)
+        for (auto j : nums4) {
+            auto iter = sum_map.find(-(i + j));
+            if (iter != sum_map.end())
+                ret += iter->second;
+        }
+    return ret;
+}
+
+/*
+ * 383. Ransom Note
+ *
+ * Constraints:
+ * 1 <= ransomNote.length, magazine.length <= 105
+ * ransomNote and magazine consist of lowercase English letters.
+ */
+bool canConstruct(string ransomNote, string magazine) {
+    int hash[26] = {0};
+    for (auto c : magazine)
+        ++hash[c - 'a'];
+    for (auto c : ransomNote) {
+        if (hash[c - 'a'] > 0)
+            --hash[c - 'a'];
+        else
+            return false;
+    }
+    return true;
+}
+
+/*
+ * 15. 3Sum
+ *
+ * Constraints:
+ * 3 <= nums.length <= 3000
+ *-105 <= nums[i] <= 105
+ */
+vector<vector<int>> threeSum(vector<int>& nums) {
+    vector<vector<int>> ret;
+    std::sort(nums.begin(), nums.end());
+    for (int i = 0; i < nums.size(); ++i) {
+        if (nums[i] > 0)
+            break;
+        if (i > 0 && nums[i] == nums[i - 1])
+            continue;
+        int left = i + 1;
+        int right = nums.size() - 1;
+        while (left < right) {
+            if (nums[i] + nums[left] + nums[right] > 0) --right;
+            else if (nums[i] + nums[left] + nums[right] < 0) ++left;
+            else {
+                while (left < right && nums[right] == nums[right - 1]) --right;
+                while (left < right && nums[left] == nums[left + 1]) ++left;
+                ret.push_back({nums[i], nums[left], nums[right]});
+                --right;
+                ++left;
+            }
+        }
+    }
+    return ret;
+}
 
 
 
