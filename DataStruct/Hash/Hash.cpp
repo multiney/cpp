@@ -10,6 +10,10 @@
 using std::string;
 using std::vector;
 
+#include <iostream>
+using std::cout;
+using std::endl;
+
 /*
  * 242============================================
  * -----------------------------------------------
@@ -238,20 +242,57 @@ vector<vector<int>> threeSum(vector<int>& nums) {
     return ret;
 }
 
+/*
+ * 18. 4Sum
+ *
+ * Constraints:
+ * 1 <= nums.length <= 200
+ * -109 <= nums[i] <= 109
+ * -109 <= target <= 109
+ */
+vector<vector<int>> fourSum(vector<int>& nums, int target) {
+    vector<vector<int>> ret;
+    if (nums.size() < 4) return ret;
+    int n = nums.size();
+    sort(nums.begin(), nums.end());
+    for (int i = 0; i < n - 3; ++i) {
+        if (i > 0 && nums[i] == nums[i - 1]) continue;
+        if ((long)nums[i] + nums[i + 3] + nums[i + 2] + nums[i + 1] > target) break;
+        if ((long)nums[i] + nums[n - 3] + nums[n - 2] + nums[n - 1] < target) continue;
+        for (int j = i + 1; j < n - 2; ++j) {
+            if (j > i + 1 && nums[j] == nums[j - 1]) continue;
+            if ((long)nums[i] + nums[j] + nums[j + 2] + nums[j + 1] > target) break;
+            if ((long)nums[i] + nums[j] + nums[n - 2] + nums[n - 1] < target) continue;
+            int left = j + 1, right = n - 1;
+            while (left < right) {
+                long sum = nums[i] + nums[j] + nums[left] + nums[right];
+                if (sum > target) --right;
+                else if (sum < target) ++left;
+                else {
+                    ret.push_back({nums[i], nums[j], nums[left], nums[right]});
+                    do {++left;} while (left < right && nums[left] == nums[left - 1]);
+                    do {--right;} while (left < right && nums[right] == nums[right + 1]);
+                }
+            }
+        }
+    }
+    return ret;
+}
 
 
 
 
 
 
-#include <iostream>
-using std::cout;
-using std::endl;
+
+
 int main (int argc, char *argv[])
 {
-    int cnt[26];
-    memset(cnt, INT_MAX, 26 * sizeof(int));
-    for (int i : cnt)
-        cout << i << endl;
-    return 0;
+    vector<int> nums{1, -2, -5, -4, -3, 3, 3, 5};
+    auto ret = fourSum(nums, -11);
+    for (auto v : ret) {
+        for (auto i : v)
+            cout << i << " ";
+        cout << endl;
+    }
 }
