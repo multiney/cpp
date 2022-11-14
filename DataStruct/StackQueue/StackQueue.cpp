@@ -1,9 +1,13 @@
 #include <stack>
 #include <queue>
+#include <string>
+#include <vector>
 #include <iostream>
 
 using std::stack;
 using std::queue;
+using std::string;
+using std::vector;
 using std::cout;
 using std::endl;
 /*
@@ -98,3 +102,75 @@ public:
     }
 };
 
+/*
+ * 20. Valid Parentheses
+ *
+ * Constraints:
+ * 1 <= s.length <= 104
+ * s consists of parentheses only '()[]{}'.
+ */
+bool isValid(string s) {
+    stack<char> stk;
+    for (char c : s) {
+        if (c == '(') stk.push(')');
+        else if (c == '[') stk.push(']');
+        else if (c == '{') stk.push('}');
+        else if (stk.empty() || stk.top() != c) return false;
+        else stk.pop();
+    }
+    return stk.empty();
+}
+
+/*
+ * 1047. Remove All Adjacent Duplicates In String
+ *
+ * Constraints:
+ * 1 <= s.length <= 105
+ * s consists of lowercase English letters.
+ */
+string removeDuplicates(string s) {
+    string ret;
+    for (char c : s) {
+        if (ret.empty() || ret.back() != c)
+            ret.push_back(c);
+        else
+            ret.pop_back();
+    }
+    return ret;
+}
+
+/*
+ * 150. Evaluate Reverse Polish Notation
+ *
+ * Constraints:
+ * 1 <= tokens.length <= 104
+ * tokens[i] is either an operator: "+", "-", "*", or "/", or an integer in the range [-200, 200].
+ */
+int evalRPN(vector<string>& tokens) {
+    stack<long long> stk;
+    for (const string &s : tokens) {
+        if (s == "+" || s == "-" || s == "*" || s == "/") {
+            long long num1 = stk.top(); stk.pop();
+            long long num2 = stk.top(); stk.pop();
+            if (s == "+") stk.push(num2 + num1);
+            else if (s == "-") stk.push(num2 - num1);
+            else if (s == "*") stk.push(num2 * num1);
+            else stk.push(num2 / num1);
+        }
+        else
+            stk.push(stoll(s));
+    }
+    return stk.top();
+}
+
+/*
+ * 239. Sliding Window Maximum
+ *
+ * Constraints:
+ * 1 <= nums.length <= 105
+ * -104 <= nums[i] <= 104
+ * 1 <= k <= nums.length
+ */
+vector<int> maxSlidingWindow(vector<int>& nums, int k) {
+    
+}
