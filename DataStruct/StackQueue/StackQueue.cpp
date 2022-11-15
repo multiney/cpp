@@ -2,12 +2,14 @@
 #include <queue>
 #include <string>
 #include <vector>
+#include <deque>
 #include <iostream>
 
 using std::stack;
 using std::queue;
 using std::string;
 using std::vector;
+using std::deque;
 using std::cout;
 using std::endl;
 /*
@@ -171,6 +173,52 @@ int evalRPN(vector<string>& tokens) {
  * -104 <= nums[i] <= 104
  * 1 <= k <= nums.length
  */
+class OrderedQueue {
+private:
+    deque<int> deque_;
+public:
+    OrderedQueue() {
+
+    }
+
+    void pop(int val) {
+        if (!deque_.empty() && deque_.front() == val)
+            deque_.pop_front();
+    }
+
+    void push(int val) {
+        while (!deque_.empty() && deque_.back() < val)
+            deque_.pop_back();
+        deque_.push_back(val);
+    }
+
+    int front() {
+        return deque_.front();
+    }
+};
+
 vector<int> maxSlidingWindow(vector<int>& nums, int k) {
-    
+    OrderedQueue que;
+    vector<int> ret;
+    for (int i = 0; i < k; ++i)
+        que.push(nums[i]);
+    ret.push_back(que.front());
+    for (int i = k; i < nums.size(); ++i) {
+        que.pop(nums[i - k]);
+        que.push(nums[i]);
+        ret.push_back(que.front());
+    }
+    return ret;
+}
+
+vector<int> maxSlidingWindow2(vector<int> &nums, int k ) {
+    deque<int> dq;
+    vector<int> ret;
+    for (int i = 0; i < nums.size(); ++i) {
+        if (!dq.empty() && dq.front() == i - k) dq.pop_front();
+        while (!dq.empty() && nums[dq.back()] < nums[i]) dq.pop_back();
+        dq.push_back(i);
+        if (i >= k - 1) ret.push_back(nums[dq.front()]);
+    }
+    return ret;
 }
