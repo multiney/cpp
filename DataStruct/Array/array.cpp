@@ -13,7 +13,7 @@ using std::string;
  * ---------------------------------------------------------------------
  */
 /*
- * 704. Binary Search
+ * 704. Binary Search 1
  */
 int search(vector<int>& nums, int target) {
     int left = 0, right = nums.size(), mid;
@@ -40,7 +40,7 @@ int search(int *nums, int numsSize, int target) {
 }
 
 /*
- * 35. Search Insert Position
+ * 35. Search Insert Position 2
  *
  * Constraints: nums contains distinct values sorted in ascending order.
  */
@@ -57,7 +57,7 @@ int searchInsert(int *nums, int numsSize, int target) {
 }
 
 /*
- * 34. Find First and Last Position of Element in Sorted Array
+ * 34. Find First and Last Position of Element in Sorted Array 3
  *
  * Note: The returned array must be malloced, assume caller calls free().
  */
@@ -88,7 +88,7 @@ int* searchRange(int *nums, int numsSize, int target, int *returnSize) {
 }
 
 /*
- * 69. Sqrt(x)
+ * 69. Sqrt(x) 4
  */
 int mySqrt(int x) {
     int s = 1, l = x, mid;
@@ -109,7 +109,7 @@ int sqrtNewton(int x) { // TODO: how?
 }
 
 /*
- * 367. Valid Perfect Square
+ * 367. Valid Perfect Square 5
  *
  * Constraints: 1 <= num <= 2^31 - 1
  */
@@ -144,7 +144,7 @@ bool isPerfectSquare2(int num) {
  * -------------------------------------------
  */
 /*
- * 27. Remove Element
+ * 27. Remove Element 6
  */
 int removeElement(vector<int> &nums, int val) {
     int slow = 0;
@@ -167,7 +167,7 @@ int removeElement2(vector<int> &nums, int val) {
 }
 
 /*
- * 26. Remove Duplicates from Sorted array
+ * 26. Remove Duplicates from Sorted array 7
  *
  * Constraints: 1 <= nums.length <= 3 * 10^4
  */
@@ -197,7 +197,7 @@ int removeDuplicates3(vector<int> &nums) {
 }
 
 /*
- * 283. Move Zeroes
+ * 283. Move Zeroes 8
  */
 void moveZeroes(vector<int> &nums) {
     int slow = 0;
@@ -220,7 +220,7 @@ void moveZeroes2(vector<int> &nums) {
 }
 
 /*
- * 844. Backspace String Compare
+ * 844. Backspace String Compare 9
  */
 bool backspaceCompare(string s, string t) {
     int i = s.size() - 1, j = t.size() - 1;
@@ -275,7 +275,7 @@ bool backspaceCompare2(string s, string t) {
 }
 
 /*
- * 977. Squares of a Sorted Array
+ * 977. Squares of a Sorted Array 10
  *
  * Note: The returned array must be malloced, assume caller calls free().
  */
@@ -307,7 +307,7 @@ int* sortedSquares(int* nums, int numsSize, int* returnSize){
  */
 
 /*
- * 209. Minimum Size Subarray Sum
+ * 209. Minimum Size Subarray Sum 11
  */
 int minSubArrayLen(int target, vector<int> &nums) {
     int left = 0, sum = 0, minLen = INT_MAX;
@@ -356,7 +356,7 @@ int minSubArrayLen3(int target, vector<int> &nums) {
 }
 
 /*
- * 904. Fruit Into Baskets
+ * 904. Fruit Into Baskets 12
  */
 int totalFruit(vector<int> &fruits) {
     std::unordered_map<int, int> count;
@@ -400,7 +400,7 @@ int lengthOfLongestSubstringTwoDistinct(string s) {
 }
 
 /*
- * 3. Longest Substring Without Repeating Characters
+ * 3. Longest Substring Without Repeating Characters 13
  */
 int lenthOfLongestSubstring(string s) {
     vector<int> map(128, 0);
@@ -426,7 +426,7 @@ int lengthOfLongestSubstring2(string s) {
 }
 
 /*
- * 76. Minimum Window Substring
+ * 76. Minimum Window Substring 14
  */
 string minWindow(string s, string t) {
     vector<int> map('z' + 1);
@@ -462,7 +462,7 @@ char* minWindow(char *s, char *t) {
  */
 
 /**
- * 59. Spiral Matrix II
+ * 59. Spiral Matrix II 15
  *
  * Return an array of arrays of size *returnSize.
  * The sizes of the arrays are returned as *returnColumnSizes array.
@@ -493,7 +493,7 @@ int** generateMatrix(int n, int* returnSize, int** returnColumnSizes){
 }
 
 /**
- * 54. Spiral Matrix
+ * 54. Spiral Matrix 16
  *
  * Note: The returned array must be malloced, assume caller calls free().
  */

@@ -1,24 +1,28 @@
 #include <fstream>
 #include <istream>
 #include <string>
+#include <regex>
 
 using std::string;
 
 int main (int argc, char *argv[])
 {
-    std::ifstream input("../../../mnt/c/Users/Administrator/Desktop/工业互联网/机理模型/模型因子标识.md");
-    std::ofstream output("../../../mnt/c/Users/Administrator/Desktop/工业互联网/机理模型/new.md");
+    std::ifstream input("../../vk/ccpp/DataStruct/Array/array.cpp");
     string line;
+    string contents;
+    std::regex reg(R"( \d+\. )");
     int i = 0;
     while (std::getline(input, line)) {
-        auto begPos = line.find("#####");
-        if (begPos != string::npos) {
-            begPos += 5;
-            line.insert(begPos, " " + std::to_string(++i));
-        }
-        output << line;
+        std::smatch match;
+        bool flag = std::regex_search(line, match, reg);
+        if (flag)
+            line = line.append(" " + std::to_string(++i));
+        line += "\n";
+        contents += line;
     }
     input.close();
+    std::ofstream output("../../vk/ccpp/DataStruct/Array/array.cpp");
+    output << contents;
     output.close();
     return 0;
 }

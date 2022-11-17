@@ -1,8 +1,11 @@
+#include <functional>
 #include <stack>
 #include <queue>
 #include <string>
 #include <vector>
 #include <deque>
+#include <unordered_map>
+#include <climits>
 #include <iostream>
 
 using std::stack;
@@ -10,6 +13,7 @@ using std::queue;
 using std::string;
 using std::vector;
 using std::deque;
+using std::unordered_map;
 using std::cout;
 using std::endl;
 /*
@@ -221,4 +225,92 @@ vector<int> maxSlidingWindow2(vector<int> &nums, int k ) {
         if (i >= k - 1) ret.push_back(nums[dq.front()]);
     }
     return ret;
+}
+
+/**
+ * 347. Top K Frequent Elements
+ * 
+ * Constraints:
+ * 1 <= nums.length <= 105
+ * -104 <= nums[i] <= 104
+ * k is in the range [1, the number of unique elements in the array].
+ * It is guaranteed that the answer is unique.
+ */
+class MyComparison {
+public:
+    bool operator() (const std::pair<int, int> &lhs, const std::pair<int, int> &rhs) {
+        return lhs.second > rhs.second;
+    }
+};
+vector<int> topKFrequent(vector<int>& nums, int k) {
+    unordered_map<int, int> map;
+    for (int i : nums)
+        ++map[i];
+    //std::priority_queue<std::pair<int, int>, vector<std::pair<int, int>>, MyComparison> que;
+    std::priority_queue<std::pair<int, int>, vector<std::pair<int, int>>
+        , std::function<bool(const std::pair<int, int>&, const std::pair<int, int>&)>> que(
+        [](const std::pair<int, int> &lhs, const std::pair<int, int> &rhs) {
+            return lhs.second > rhs.second;
+        },
+        vector<std::pair<int, int>>()
+    );
+    for (const std::pair<int, int> &p : map) {
+        que.push(p);
+        if (que.size() > k)
+            que.pop();
+    }
+    vector<int> ret(k);
+    for (int i = k - 1; i >= 0; --i) {
+        ret[i] = que.top().first;
+        que.pop();
+    }
+    return ret;
+}
+
+vector<int> topKFrequent3(vector<int> &nums, int k) {
+    using mapIter = std::unordered_map<int, int>::iterator;
+    unordered_map<int, int> map;
+    for (int i : nums)
+        ++map[i];
+    std::priority_queue<mapIter, vector<mapIter>, std::function<bool(mapIter, mapIter)>> que(
+        [](mapIter l, mapIter r) {
+            return l->second > r->second;
+        },
+        vector<mapIter>()
+    );
+    for (unordered_map<int, int>::iterator beg = map.begin(); beg != map.end(); ++beg) {
+        que.push(beg);
+        if (que.size() > k)
+            que.pop();
+    }
+    vector<int> ret(k);
+    for (int i = k - 1; i >= 0; --i) {
+        ret[i] = que.top()->first;
+        que.pop();
+    }
+    return ret;
+}
+
+vector<int> topKFrequent2(vector<int> &nums, int k) {
+    vector<vector<int>> bucket(nums.size() + 1);
+    std::unordered_map<int, int> map;
+    for (int i : nums)
+        ++map[i];
+    for (const std::pair<int, int> &p : map)
+        bucket[p.second].push_back(p.first);
+    vector<int> ret(k);
+    for (int i = bucket.size() - 1, j = k - 1; j >= 0; --i)
+        if (bucket[i].size() != 0) // TODO: == 0 异常?
+            for (int e : bucket[i])
+                ret[j--] = e;
+    return ret;
+}
+
+int main (int argc, char *argv[])
+{
+    vector<vector<int>> vvi;
+    for (auto vi : vvi)
+        for (int i : vi)
+            cout << i << endl;
+    return 0;
 }
