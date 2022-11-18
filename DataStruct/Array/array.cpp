@@ -220,7 +220,7 @@ void moveZeroes2(vector<int> &nums) {
 }
 
 /*
- * 844. Backspace String Compare 9
+ * 844. Backspace String Compare 9 __FIRST__
  */
 bool backspaceCompare(string s, string t) {
     int i = s.size() - 1, j = t.size() - 1;
