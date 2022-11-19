@@ -1,20 +1,20 @@
 #include <vector>
 #include <string>
+#include <climits>
+#include <algorithm>
+#include <unordered_map>
 using namespace std;
 
-vector<int> sortedSquares(vector<int>& nums) {
-    int left = 0, right = nums.size() - 1, index = nums.size();
-    vector<int> ret(index);
-    while (left <= right) {
-        nums[left] = nums[left] < 0 ? -nums[left] : nums[left];
-        nums[right] = nums[right] < 0 ? -nums[right] : nums[right];
-        if (nums[left] > nums[right]) {
-            ret[--index] = nums[left] * nums[left];
-            ++left;
-        } else {
-            ret[--index] = nums[right] * nums[right];
-            --right;
+int totalFruit(vector<int>& fruits) {
+    unordered_map<int, int> count;
+    int slow = 0;
+    for (int i = 0; i < fruits.size(); ++i) {
+        ++count[fruits[i]];
+        while (count.size() > 2) {
+            if (--count[fruits[slow]] == 0)
+                count.erase(fruits[slow]);
+            ++slow;
         }
     }
-    return ret;
+    return fruits.size() - slow;
 }

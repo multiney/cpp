@@ -343,7 +343,7 @@ int upperBound(int begin, int end, int target, const vector<int> &vec) {
     }
     return begin;
 }
-int minSubArrayLen3(int target, vector<int> &nums) {
+int minSubArrayLen3(int target, vector<int> &nums) { // __FIRST__
     int n = nums.size(), minLen = INT_MAX;
     vector<int> sums(n + 1);
     for (int i = 1; i <= n; ++i)

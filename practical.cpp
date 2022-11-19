@@ -1,12 +1,13 @@
 #include <fstream>
 #include <istream>
+#include <iostream>
 #include <string>
 #include <regex>
+#include <random>
 
 using std::string;
 
-int main (int argc, char *argv[])
-{
+void operateFile() {
     std::ifstream input("../../vk/ccpp/DataStruct/Array/array.cpp");
     string line;
     string contents;
@@ -24,5 +25,28 @@ int main (int argc, char *argv[])
     std::ofstream output("../../vk/ccpp/DataStruct/Array/array.cpp");
     output << contents;
     output.close();
-    return 0;
+}
+
+void generateChartParam(int n) {
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> xNum(6, 12), yRange(0, 200), xStep(5, 20);
+    string line;
+    int xnum = xNum(gen), xstep = xStep(gen);
+    for (int j = 0; j < xnum; ++j) {
+        line = std::to_string(xstep * (j + 1));
+        line += " : ";
+        for (int i = 0; i < n - 1; ++i) {
+            line += std::to_string(yRange(gen)) + ", ";
+        }
+        line += std::to_string(yRange(gen));
+        std::cout << line << std::endl;
+    }
+}
+
+int main (int argc, char *argv[])
+{
+    int n;
+    std::cin >> n;
+    generateChartParam(n);
 }
