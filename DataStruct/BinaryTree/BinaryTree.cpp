@@ -1,4 +1,5 @@
 #include "../include-file.h"
+#include <queue>
 
 /**
  * Definition for a binary tree node.
@@ -11,6 +12,26 @@ struct TreeNode
     TreeNode() : val(0), left(nullptr), right(nullptr) {}
     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+};
+
+/**
+ * Definition for a Node.
+ */
+class Node {
+public:
+    int val;
+    vector<Node*> children;
+
+    Node() {}
+
+    Node(int _val) {
+        val = _val;
+    }
+
+    Node(int _val, vector<Node*> _children) {
+        val = _val;
+        children = _children;
+    }
 };
 
 /**
@@ -246,3 +267,191 @@ vector<int> postorderTraversal(TreeNode* root) {
 //         reverseNodes(end, start);
 //     }
 // };
+
+/**
+ * 102=======================================
+ * ------------------------------------------
+ */
+
+/**
+ * 102. Binary Tree Level Order Traversal
+ *
+ * Constraints:
+ * The number of nodes in the tree is in the range [0, 2000].
+ * -1000 <= Node.val <= 1000
+ */
+vector<vector<int>> levelOrder(TreeNode* root) {
+    if (!root) return {};
+    vector<vector<int>> ret;
+    queue<TreeNode*> que;
+    que.push(root);
+    TreeNode *node;
+    int size;
+    while (!que.empty()) {
+        size = que.size();
+        vector<int> level;
+        while (size--) {
+            node = que.front();
+            que.pop();
+            level.push_back(node->val);
+            if (node->left) que.push(node->left);
+            if (node->right) que.push(node->right);
+        }
+        ret.push_back(level);
+    }
+    return ret;
+}
+
+vector<vector<int>> retVec;
+
+void buildVec(TreeNode *root, int depth) {
+    if (!root) return;
+    if (retVec.size() == depth)
+        retVec.push_back(vector<int>());
+    retVec[depth].push_back(root->val);
+    if (root->left) buildVec(root->left, depth + 1);
+    if (root->right) buildVec(root->right, depth + 1);
+}
+
+vector<vector<int>> levelOrder2(TreeNode *root) {
+    buildVec(root, 0);
+    return retVec;
+}
+
+/**
+ * 107. Binary Tree Level Order Traversal II
+ *
+ * The number of nodes in the tree is in the range [0, 2000].
+ * -1000 <= Node.val <= 1000
+ */
+int findDepth(TreeNode *root) {
+    if (!root) return 0;
+    return std::max(findDepth(root->left), findDepth(root->right)) + 1;
+}
+vector<vector<int>> levelOrderBottom(TreeNode* root) {
+    if (!root) return {};
+    int depth = findDepth(root);
+    vector<vector<int>> ret(depth);
+    queue<TreeNode*> que;
+    que.push(root);
+    int size;
+    TreeNode *node;
+    for (int i = depth - 1; i >= 0; --i) {
+        size = que.size();
+        while (size--) {
+            node = que.front();
+            que.pop();
+            ret[i].push_back(node->val);
+            if (node->left) que.push(node->left);
+            if (node->right) que.push(node->right);
+        }
+    }
+    return ret;
+}
+
+/**
+ * 199. Binary Tree Right Side View __U__
+ *
+ * Constraints:
+ * The number of nodes in the tree is in the range [0, 100].
+ * -100 <= Node.val <= 100
+ */
+vector<int> rightSideView(TreeNode* root) {
+    if (!root)
+        return {};
+    vector<int> ret;
+    queue<TreeNode*> que;
+    que.push(root);
+    TreeNode *node;
+    int size;
+    while (!que.empty()) {
+        size = que.size();
+        while (size--) {
+            node = que.front();
+            que.pop();
+            if (size == 0)
+                ret.push_back(node->val);
+            if (node->left) que.push(node->left);
+            if (node->right) que.push(node->right);
+        }
+    }
+    return ret;
+}
+
+/**
+ * 637. Average of Levels in Binary Tree __U__
+ *
+ * Constraints:
+ * The number of nodes in the tree is in the range [1, 104].
+ * -231 <= Node.val <= 231 - 1
+ */
+vector<double> averageOfLevels(TreeNode* root) {
+    vector<double> ret;
+    queue<TreeNode*> que;
+    que.push(root);
+    int size;
+    double sum;
+    TreeNode *node;
+    while (!que.empty()) {
+        size = que.size();
+        sum = 0;
+        for (int i = 0; i < size; ++i) {
+            node = que.front();
+            que.pop();
+            sum += node->val;
+            if (node->left) que.push(node->left);
+            if (node->right) que.push(node->right);
+        }
+        ret.push_back(sum / size);
+    }
+    return ret;
+}
+
+/**
+ * 429. N-ary Tree Level Order Traversal __U__
+ *
+ * Constraints:
+ * The height of the n-ary tree is less than or equal to 1000
+ * The total number of nodes is between [0, 104]
+ */
+vector<vector<int>> levelOrder(Node* root) {
+    if (!root) return {};
+    vector<vector<int>> ret;
+    queue<Node*> que;
+    que.push(root);
+    int size;
+    Node *node;
+    while (!que.empty()) {
+        size = que.size();
+        vector<int> vec;
+        while (size--) {
+            node = que.front();
+            que.pop();
+            vec.push_back(node->val);
+            for (Node *n : node->children)
+                que.push(n);
+        }
+        ret.push_back(vec);
+    }
+    return ret;
+}
+
+void buildVec(Node *root, int depth) {
+    if (!root) return;
+    if (retVec.size() == depth)
+        retVec.push_back(vector<int>());
+    retVec[depth].push_back(root->val);
+    for (Node *node : root->children)
+        buildVec(node, depth + 1);
+}
+
+vector<vector<int>> levelOrder2(Node* root) {
+    buildVec(root, 0);
+    return retVec;
+}
+
+
+/**
+ * ------------------------------------------
+ * 102=======================================
+ */

@@ -358,7 +358,7 @@ int minSubArrayLen3(int target, vector<int> &nums) { // __FIRST__
 /*
  * 904. Fruit Into Baskets 12
  */
-int totalFruit(vector<int> &fruits) {
+int totalFruit(vector<int> &fruits) { // __RECOMMENDED__
     std::unordered_map<int, int> count;
     int i, j;
     for (i = 0, j = 0; j < fruits.size(); ++j) {
@@ -402,7 +402,7 @@ int lengthOfLongestSubstringTwoDistinct(string s) {
 /*
  * 3. Longest Substring Without Repeating Characters 13
  */
-int lenthOfLongestSubstring(string s) {
+int lenthOfLongestSubstring(string s) { // __RECOMMENDED__
     vector<int> map(128, 0);
     int counter = 0, begin = 0, end = 0, ret = 0;
     while (end < s.size()) {
@@ -413,7 +413,7 @@ int lenthOfLongestSubstring(string s) {
     return ret;
 }
 
-int lengthOfLongestSubstring2(string s) {
+int lengthOfLongestSubstring2(string s) { // __BETTER__
     vector<int> map(128, 0);
     int ret = 0;
     for (int i = 0, j = 0; j < s.size(); ++j) {

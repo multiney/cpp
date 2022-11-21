@@ -5,16 +5,21 @@
 #include <unordered_map>
 using namespace std;
 
-int totalFruit(vector<int>& fruits) {
-    unordered_map<int, int> count;
-    int slow = 0;
-    for (int i = 0; i < fruits.size(); ++i) {
-        ++count[fruits[i]];
-        while (count.size() > 2) {
-            if (--count[fruits[slow]] == 0)
-                count.erase(fruits[slow]);
-            ++slow;
+string minWindow(string s, string t) {
+    vector<int> map('z' + 1);
+    for (char c : t)
+        ++map[c];
+    int counter = t.size();
+    int minLen = INT_MAX;
+    int start = 0;
+    for (int i = 0, j = 0; j < s.size();) {
+        if (map[s[j++]]-- > 0)
+            --counter;
+        while (counter == 0) {
+            minLen = std::min(minLen, j - (start = i));
+            if (map[s[i++]]++ >= 0)
+                ++counter;
         }
     }
-    return fruits.size() - slow;
+    return minLen == INT_MAX ? "" : s.substr(start, minLen);
 }
