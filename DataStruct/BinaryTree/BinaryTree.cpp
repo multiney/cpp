@@ -621,3 +621,21 @@ int minDepth(TreeNode* root) {
  * ------------------------------------------
  * 102=======================================
  */
+
+/**
+ * 226. Invert Binary Tree
+ *
+ * Constraints:
+ * The number of nodes in the tree is in the range [0, 100].
+ * -100 <= Node.val <= 100
+ */
+void invertHelper(TreeNode *root) {
+    if (!root) return;
+    std::swap(root->left, root->right);
+    invertHelper(root->left);
+    invertHelper(root->right);
+}
+TreeNode* invertTree(TreeNode* root) {
+    invertHelper(root);
+    return root;
+}
