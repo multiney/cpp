@@ -629,13 +629,70 @@ int minDepth(TreeNode* root) {
  * The number of nodes in the tree is in the range [0, 100].
  * -100 <= Node.val <= 100
  */
-void invertHelper(TreeNode *root) {
-    if (!root) return;
-    std::swap(root->left, root->right);
-    invertHelper(root->left);
-    invertHelper(root->right);
-}
 TreeNode* invertTree(TreeNode* root) {
-    invertHelper(root);
+    if (!root) return nullptr;
+    std::swap(root->left, root->right); // 后序也可
+    invertTree(root->left);
+    invertTree(root->right);
     return root;
+}
+
+TreeNode* invertTree2(TreeNode *root) {
+    if (!root) return nullptr;
+    invertTree(root->left);
+    std::swap(root->left, root->right);
+    invertTree(root->left);
+    return root;
+}
+
+void printStack(stack<TreeNode*> &stk) {
+    if (stk.empty()) return;
+    stack<TreeNode*> temp;
+    while (!stk.empty()) {
+        temp.push(stk.top());
+        stk.pop();
+    }
+    while (!temp.empty()) {
+        cout << temp.top()->val << " ";
+        stk.push(temp.top());
+        temp.pop();
+    }
+    cout << "stk" << endl;
+}
+
+TreeNode* invertTree3(TreeNode *root) {
+    if (!root) return nullptr;
+    stack<TreeNode*> stk;
+    TreeNode *curr = root;
+    while (curr || !stk.empty()) {
+        if (curr) {
+            std::swap(curr->left, curr->right);
+            stk.push(curr);
+            curr = curr->left;
+        } else {
+            curr = stk.top()->right;
+            stk.pop();
+        }
+    }
+    return root;
+}
+
+int main (int argc, char *argv[])
+{
+    TreeNode *root = new TreeNode(4, new TreeNode(2, new TreeNode(1), new TreeNode(3)), new TreeNode(7, new TreeNode(6), new TreeNode(9)));
+    // TreeNode *root = new TreeNode(4, nullptr, nullptr);
+    invertTree3(root);
+    auto ret = preorderTraversal(root);
+    for (auto i : ret)
+        cout << i << " ";
+    cout << endl;
+    // stack<TreeNode*> temp;
+    // temp.push(new TreeNode(4));
+    // temp.push(new TreeNode(7));
+    // temp.push(new TreeNode(9));
+    // printStack(temp);
+    int i = 0;
+    int *p = &i;
+    cout << *p << endl;
+    return 0;
 }
