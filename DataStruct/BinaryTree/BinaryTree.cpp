@@ -1,4 +1,6 @@
 #include "../include-file.h"
+#include <algorithm>
+#include <climits>
 #include <queue>
 
 /**
@@ -450,6 +452,170 @@ vector<vector<int>> levelOrder2(Node* root) {
     return retVec;
 }
 
+/**
+ * 515. Find Largest Value in Each Tree Row __U__
+ *
+ * Constraints:
+ * The number of nodes in the tree will be in the range [0, 104].
+ * -231 <= Node.val <= 231 - 1
+ */
+vector<int> largestValues(TreeNode* root) {
+    if (!root) return {};
+    vector<int> ret;
+    queue<TreeNode*> que;
+    que.push(root);
+    TreeNode *node;
+    int size, maxVal;
+    while (!que.empty()) {
+        size = que.size();
+        maxVal = que.front()->val;
+        while (size--) {
+            node = que.front();
+            que.pop();
+            maxVal = std::max(maxVal, node->val);
+            if (node->left) que.push(node->left);
+            if (node->right) que.push(node->right);
+        }
+        ret.push_back(maxVal);
+    }
+    return ret;
+}
+
+void largestValuesTraversal(TreeNode *root, int depth, vector<int> &vec) {
+    if (!root) return;
+    if (vec.size() == depth) vec.push_back(INT_MIN);
+    vec[depth] = std::max(vec[depth], root->val);
+    largestValuesTraversal(root->left, depth + 1, vec);
+    largestValuesTraversal(root->right, depth + 1, vec);
+}
+
+vector<int> largestValues2(TreeNode* root) {
+    vector<int> ret;
+    largestValuesTraversal(root, 0, ret);
+    return ret;
+}
+
+/*
+ * Definition for a Node.
+ */
+class Node2 {
+public:
+    int val;
+    Node2* left;
+    Node2* right;
+    Node2* next;
+
+    Node2() : val(0), left(NULL), right(NULL), next(NULL) {}
+
+    Node2(int _val) : val(_val), left(NULL), right(NULL), next(NULL) {}
+
+    Node2(int _val, Node2* _left, Node2* _right, Node2* _next)
+        : val(_val), left(_left), right(_right), next(_next) {}
+};
+
+/**
+ * 116. Populating Next Right Pointers in Each Node __U__
+ *
+ * Constraints:
+ * The number of nodes in the tree is in the range [0, 212 - 1].
+ * -1000 <= Node.val <= 1000
+ */
+Node2* connect(Node2* root) {
+    if (!root) return nullptr;
+    queue<Node2*> que;
+    que.push(root);
+    Node2* node;
+    int size;
+    while (!que.empty()) {
+        size = que.size();
+        while (size--) {
+            node = que.front();
+            que.pop();
+            if (size)
+                node->next = que.front();
+            else
+                node->next = nullptr;
+            if (node->left) que.push(node->left);
+            if (node->right) que.push(node->right);
+        }
+    }
+    return root;
+}
+
+/**
+ * 117. Populating Next Right Pointers in Each Node II __U__
+ *
+ * Constraints:
+ * The number of nodes in the tree is in the range [0, 6000].
+ * -100 <= Node.val <= 100
+ */
+Node2* connect2(Node2* root) {
+    Node2* levelStart = root;
+    Node2* curr;
+    while (levelStart) {
+        curr = levelStart;
+        while (curr) {
+            if (curr->left) curr->left->next = curr->right;
+            if (curr->right && curr->next) curr->right->next = curr->next->left;
+            curr = curr->next;
+        }
+        levelStart = levelStart->left;
+    }
+    return root;
+}
+
+/**
+ * 104. Maximum Depth of Binary Tree
+ *
+ * Constraints:
+ * The number of nodes in the tree is in the range [0, 104].
+ * -100 <= Node.val <= 100
+ */
+int maxDepth(TreeNode* root) {
+    return root ? std::max(maxDepth(root->left), maxDepth(root->right)) + 1 : 0;
+}
+
+int maxDepth2(TreeNode *root) {
+    if (!root) return 0;
+    stack<TreeNode*> nodeStk;
+    stack<int> depthStk;
+    nodeStk.push(root);
+    depthStk.push(1);
+    TreeNode *node;
+    int ret = 0, temp;
+    while (!nodeStk.empty()) {
+        node = nodeStk.top(); nodeStk.pop();
+        temp = depthStk.top(); depthStk.pop();
+        ret = std::max(ret, temp);
+        if (node->left) {
+            nodeStk.push(node->left);
+            depthStk.push(temp + 1);
+        }
+        if (node->right) {
+            nodeStk.push(node->right);
+            depthStk.push(temp + 1);
+        }
+    }
+    return ret;
+}
+
+/**
+ * 111. Minimum Depth of Binary Tree
+ *
+ * Constraints:
+ * The number of nodes in the tree is in the range [0, 105].
+ * -1000 <= Node.val <= 1000
+ */
+int minDepth(TreeNode* root) {
+    if (!root) return 0;
+    if (!root->left && !root->right) return 1;
+    if (root->left && root->right)
+        return std::min(minDepth(root->left), minDepth(root->right)) + 1;
+    else if (root->left)
+        return minDepth(root->left) + 1;
+    else
+        return minDepth(root->right) + 1;
+}
 
 /**
  * ------------------------------------------
