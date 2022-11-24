@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <climits>
 #include <queue>
+#include <string>
 
 /**
  * Definition for a binary tree node.
@@ -571,7 +572,7 @@ Node2* connect2(Node2* root) {
  * The number of nodes in the tree is in the range [0, 104].
  * -100 <= Node.val <= 100
  */
-int maxDepth(TreeNode* root) {
+int maxDepth(TreeNode* root) { // postorder
     return root ? std::max(maxDepth(root->left), maxDepth(root->right)) + 1 : 0;
 }
 
@@ -597,6 +598,63 @@ int maxDepth2(TreeNode *root) {
         }
     }
     return ret;
+}
+
+int retDepth;
+
+void getDepth(TreeNode *root, int depth) {
+    retDepth = retDepth < depth ? depth : retDepth; // mid
+    if (!root->left && !root->right) return;
+    if (root->left) getDepth(root->left, depth + 1); // left
+    if (root->right) getDepth(root->right, depth + 1); // right
+}
+
+int maxDepth3(TreeNode *root) {
+    retDepth = 0;
+    if (!root) return 0;
+    getDepth(root, 1);
+    return retDepth;
+}
+
+int getDepth(TreeNode* cur) { // TODO: figure out it
+    stack<TreeNode*> st;
+    if (cur != NULL) st.push(cur);
+    int depth = 0; // 记录深度
+    int result = 0;
+    while (!st.empty()) {
+        TreeNode* node = st.top();
+        if (node != NULL) {
+            st.pop();
+            st.push(node);                          // 中
+            st.push(NULL);
+            depth++;
+            if (node->right) st.push(node->right);  // 右
+            if (node->left) st.push(node->left);    // 左
+
+        } else {
+            st.pop();
+            node = st.top();
+            st.pop();
+            depth--;
+        }
+        result = result > depth ? result : depth;
+    }
+    return result;
+}
+
+/**
+ * 559. Maximum Depth of N-ary Tree
+ *
+ * Constraints:
+ * The total number of nodes is in the range [0, 104].
+ * The depth of the n-ary tree is less than or equal to 1000.
+ */
+int maxDepth(Node* root) {
+    if (!root) return 0;
+    int depth = 0;
+    for (Node *node : root->children)
+        depth = std::max(maxDepth(node), depth);
+    return depth + 1;
 }
 
 /**
@@ -677,22 +735,294 @@ TreeNode* invertTree3(TreeNode *root) {
     return root;
 }
 
+/**
+ * 101. Symmetric Tree // TODO: 100 572
+ *
+ * Constraints:
+ * The number of nodes in the tree is in the range [1, 1000].
+ * -100 <= Node.val <= 100
+ */
+bool isEqual(TreeNode *left, TreeNode *right) {
+    if (!left && !right) return true;
+    if (!left || !right || (left->val != right->val)) return false;
+    return isEqual(left->left, right->right) && isEqual(left->right, right->left);
+}
+bool isSymmetric(TreeNode* root) {
+    return isEqual(root->left, root->right);
+}
+
+bool isSymmetric2(TreeNode *root) {
+    stack<TreeNode*> stk;
+    stk.push(root->right);
+    stk.push(root->left);
+    TreeNode *left, *right;
+    while (!stk.empty()) {
+        left = stk.top(); stk.pop();
+        right = stk.top(); stk.pop();
+        if (!left && !right) continue;
+        if (!left || !right || left->val != right->val) return false;
+        stk.push(right->left);
+        stk.push(left->right);
+        stk.push(right->right);
+        stk.push(left->left);
+    }
+    return true;
+}
+
+bool isSymmetric3(TreeNode * root) {
+    queue<TreeNode*> que;
+    que.push(root->left);
+    que.push(root->right);
+    TreeNode *left, *right;
+    while (!que.empty()) {
+        left = que.front(); que.pop();
+        right = que.front(); que.pop();
+        if (!left && !right) continue;
+        if (!left || !right || left->val != right->val) return false;
+        que.push(left->left);
+        que.push(right->right);
+        que.push(left->right);
+        que.push(right->left);
+    }
+    return true;
+}
+
+/**
+ * 222. Count Complete Tree Nodes
+ *
+ * Constraints:
+ * The number of nodes in the tree is in the range [0, 5 * 104].
+ * 0 <= Node.val <= 5 * 104
+ * The tree is guaranteed to be complete.
+ */
+int countNodes(TreeNode* root) {
+    return root ? 1 + countNodes(root->left) + countNodes(root->right) : 0;
+}
+
+int countNodes2(TreeNode* root) {
+    stack<TreeNode*> stk;
+    TreeNode *curr = root;
+    int ret = 0;
+    while (curr || !stk.empty()) {
+        if (curr) {
+            stk.push(curr);
+            curr = curr->left;
+            ++ret;
+        } else {
+            curr = stk.top()->right;
+            stk.pop();
+        }
+    }
+    return ret;
+}
+
+/**
+ * 110. Balanced Binary Tree
+ *
+ * Constraints:
+ * The number of nodes in the tree is in the range [0, 5000].
+ * -104 <= Node.val <= 104
+ */
+int getHeight(TreeNode *node) {
+    if (!node) return 0;
+    int leftHeight = getHeight(node->left);
+    if (leftHeight == -1) return -1;
+    int rightHeight = getHeight(node->right);
+    if (rightHeight == -1) return -1;
+    return std::abs(leftHeight - rightHeight) > 1 ? -1 : std::max(leftHeight, rightHeight) + 1;
+}
+
+bool isBalanced(TreeNode* root) {
+    return getHeight(root) != -1;
+}
+
+/**
+ * 257. Binary Tree Paths
+ *
+ * Constraints:
+ * The number of nodes in the tree is in the range [1, 100].
+ * -100 <= Node.val <= 100
+ */
+void pathTraversal(TreeNode *curr, string path, vector<string> &vec) {
+    path += std::to_string(curr->val);
+    if (!curr->left && !curr->right) {
+        vec.push_back(path);
+        return;
+    }
+    if (curr->left) pathTraversal(curr->left, path + "->", vec);
+    if (curr->right) pathTraversal(curr->right, path + "->", vec);
+}
+
+vector<string> binaryTreePaths(TreeNode* root) {
+    vector<string> ret;
+    string path;
+    pathTraversal(root, path, ret);
+    return ret;
+}
+
+vector<string> binaryTreePaths2(TreeNode *root) {
+    vector<string> ret;
+    stack<TreeNode*> nodeStk;
+    stack<string> pathStk;
+    nodeStk.push(root);
+    pathStk.push(std::to_string(root->val));
+    while (!nodeStk.empty()) {
+        TreeNode *curr = nodeStk.top(); nodeStk.pop();
+        string path = pathStk.top(); pathStk.pop();
+        if (!curr->left && !curr->right)
+            ret.push_back(path);
+        if (curr->left) {
+            nodeStk.push(curr->left);
+            pathStk.push(path + "->" + std::to_string(curr->left->val));
+        }
+        if (curr->right) {
+            nodeStk.push(curr->right);
+            pathStk.push(path + "->" + std::to_string(curr->right->val));
+        }
+    }
+    return ret;
+}
+
+/**
+ * 404. Sum of Left Leaves
+ *
+ * Constraints:
+ * The number of nodes in the tree is in the range [1, 1000].
+ * -1000 <= Node.val <= 1000
+ */
+int sumOfLeftLeaves(TreeNode* root) {
+    if (!root) return 0;
+    if (root->left && !root->left->left && !root->left->right) return root->left->val + sumOfLeftLeaves(root->right);
+    return sumOfLeftLeaves(root->left) + sumOfLeftLeaves(root->right);
+}
+
+int sumOfLeftLeaves2(TreeNode* root) {
+    stack<TreeNode*> stk;
+    int ret = 0;
+    while (root || !stk.empty()) {
+        if (root) {
+            stk.push(root);
+            if (root->left && !root->left->left && !root->left->right) {
+                ret += root->left->val;
+                root = nullptr;
+                continue;
+            }
+            root = root->left;
+        } else {
+            root = stk.top()->right;
+            stk.pop();
+        }
+    }
+    return ret;
+}
+
+/**
+ * 513. Find Bottom Left Tree Value
+ *
+ * Constraints:
+ * The number of nodes in the tree is in the range [1, 104].
+ * -231 <= Node.val <= 231 - 1
+ */
+void findBottomLeftValueTraversal(TreeNode* root, int depth, int &maxDepth, int &ret) {
+    if (!root) return;
+    if (root->left) findBottomLeftValueTraversal(root->left, depth + 1, maxDepth, ret);
+    if (root->right) findBottomLeftValueTraversal(root->right, depth + 1, maxDepth, ret);
+    if (depth > maxDepth) {
+        maxDepth = depth;
+        ret = root->val;
+    }
+}
+int findBottomLeftValue(TreeNode* root) {
+    int maxDepth = INT_MIN;
+    int ret;
+    findBottomLeftValueTraversal(root, 0, maxDepth, ret);
+    return ret;
+}
+
+/**
+ * 112. Path Sum
+ *
+ * Constraints:
+ * The number of nodes in the tree is in the range [0, 5000].
+ * -1000 <= Node.val <= 1000
+ * -1000 <= targetSum <= 1000
+ */
+bool hasPathSum(TreeNode* root, int targetSum) {
+    if (!root) return false;
+    if (!root->left && !root->right && targetSum == root->val) return true;
+    return hasPathSum(root->left, targetSum - root->val) || hasPathSum(root->right, targetSum - root->val);
+}
+
+/*
+bool hasPathSum2(TreeNode *root, int targetSum) { TODO: figure out it
+    stack<TreeNode*> stk;
+    stack<int> numStk;
+    while (root || !stk.empty()) {
+        if (root) {
+            stk.push(root);
+            numStk.push
+            if (!root->left && !root->right && targetSum == numStk.top()) return true;
+        }
+    }
+}
+*/
+
+/**
+ * 106. Construct Binary Tree from Inorder and Postorder Traversal
+ *
+ * Constraints:
+ * 1 <= inorder.length <= 3000
+ * postorder.length == inorder.length
+ * -3000 <= inorder[i], postorder[i] <= 3000
+ * inorder and postorder consist of unique values.
+ * Each value of postorder also appears in inorder.
+ * inorder is guaranteed to be the inorder traversal of the tree.
+ * postorder is guaranteed to be the postorder traversal of the tree.
+ */
+TreeNode* buildTreeHelper(vector<int> &inorder, int inBeg, int inEnd, vector<int> &postorder, int postBeg, int postEnd) {
+    if (inBeg >= inEnd) return nullptr;
+    TreeNode *root = new TreeNode(postorder[postEnd - 1]);
+    int delimiterIndex;
+    for (delimiterIndex = inBeg; delimiterIndex < inEnd; ++delimiterIndex)
+        if (inorder[delimiterIndex] == postorder[postEnd - 1]) break;
+    root->left = buildTreeHelper(inorder, inBeg, delimiterIndex, postorder, postBeg, postBeg + (delimiterIndex - inBeg));
+    root->right = buildTreeHelper(inorder, delimiterIndex + 1, inEnd, postorder, postBeg + (delimiterIndex - inBeg), postEnd - 1);
+    return root;
+}
+TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
+    return buildTreeHelper(inorder, 0, inorder.size(), postorder, 0, postorder.size());
+}
+
+/**
+ * 654. Maximum Binary Tree
+ *
+ * Constraints:
+ * 1 <= nums.length <= 1000
+ * 0 <= nums[i] <= 1000
+ * All integers in nums are unique.
+ */
+TreeNode* constructMaximumBinaryTreeHelper(vector<int> &nums, int beg, int end) {
+    if (beg == end) return nullptr;
+    int maxIndex = beg;
+    for (int i = beg; i < end; ++i)
+        if (nums[maxIndex] < nums[i])
+            maxIndex = i;
+    TreeNode *root = new TreeNode(nums[maxIndex]);
+    root->left = constructMaximumBinaryTreeHelper(nums, beg, maxIndex);
+    root->right = constructMaximumBinaryTreeHelper(nums, maxIndex + 1, end);
+    return root;
+}
+TreeNode* constructMaximumBinaryTree(vector<int>& nums) {
+    return constructMaximumBinaryTreeHelper(nums, 0, nums.size());
+}
+
+
 int main (int argc, char *argv[])
 {
     TreeNode *root = new TreeNode(4, new TreeNode(2, new TreeNode(1), new TreeNode(3)), new TreeNode(7, new TreeNode(6), new TreeNode(9)));
-    // TreeNode *root = new TreeNode(4, nullptr, nullptr);
-    invertTree3(root);
-    auto ret = preorderTraversal(root);
-    for (auto i : ret)
-        cout << i << " ";
-    cout << endl;
-    // stack<TreeNode*> temp;
-    // temp.push(new TreeNode(4));
-    // temp.push(new TreeNode(7));
-    // temp.push(new TreeNode(9));
-    // printStack(temp);
-    int i = 0;
-    int *p = &i;
-    cout << *p << endl;
+    TreeNode *node = new TreeNode(3, new TreeNode(9), new TreeNode(20, new TreeNode(15), new TreeNode(7)));
+    sumOfLeftLeaves2(node);
     return 0;
 }
+
+

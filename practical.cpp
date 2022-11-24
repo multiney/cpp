@@ -8,7 +8,7 @@
 using std::string;
 
 void operateFile() {
-    std::ifstream input("../../vk/ccpp/DataStruct/Array/array.cpp");
+    std::ifstream input("../../vk/ccpp/DataStruct/LinkedList/LinkedList.cpp");
     string line;
     string contents;
     std::regex reg(R"( \d+\. )");
@@ -22,7 +22,7 @@ void operateFile() {
         contents += line;
     }
     input.close();
-    std::ofstream output("../../vk/ccpp/DataStruct/Array/array.cpp");
+    std::ofstream output("../../vk/ccpp/DataStruct/LinkedList/LinkedList.cpp");
     output << contents;
     output.close();
 }
@@ -46,7 +46,5 @@ void generateChartParam(int n) {
 
 int main (int argc, char *argv[])
 {
-    int n;
-    std::cin >> n;
-    generateChartParam(n);
+    operateFile();
 }

@@ -15,7 +15,7 @@ struct ListNode {
 static const auto fast=[](){ios_base::sync_with_stdio(false);cin.tie(nullptr);cout.tie(nullptr);return nullptr;}();
 
 /*
- * 203. Remove Linked List Elements
+ * 203. Remove Linked List Elements 1
  */
 ListNode* removeElements(ListNode *head, int val) {
     ListNode *sentinel = new ListNode(0, head);
@@ -37,7 +37,7 @@ ListNode* removeElements2(ListNode *head, int val) {
 }
 
 /*
- * 707. Design Linked List
+ * 707. Design Linked List 2
  */
 class MyLinkedList {
 public:
@@ -105,7 +105,7 @@ private:
 };
 
 /*
- * 206. Reverse Linked List
+ * 206. Reverse Linked List 3
  */
 ListNode* reverseList(ListNode *head) {
     ListNode *prev = nullptr, *curr = head, *tmp = nullptr;
@@ -128,7 +128,7 @@ ListNode* reverseList2(ListNode *head) {
 }
 
 /*
- * 24. Swap Nodes in Pairs
+ * 24. Swap Nodes in Pairs 4
  */
 /*
  * Pointer-pointer pp points to the pointer to the current node. So at first, pp points to head, and later it points to the next field of ListNodes. Additionally, for convenience and clarity, pointers a and b point to the current node and the next node.
@@ -155,7 +155,7 @@ ListNode* swapPairs2(ListNode *head) {
 }
 
 /*
- * 19. Remove Nth Node From End of List
+ * 19. Remove Nth Node From End of List 5
  *
  * Constraints:
  *
@@ -195,7 +195,7 @@ ListNode* removeNthFromEnd2(ListNode *head, int n) {
 }
 
 /*
- * 160. Intersection of Two Linked Lists
+ * 160. Intersection of Two Linked Lists 6
  *
  * Constraints:
  *
@@ -249,7 +249,7 @@ ListNode* getIntersectionNode2(ListNode *headA, ListNode *headB) {
 }
 
 /*
- * 142. Linked List Cycle II
+ * 142. Linked List Cycle II 7
  *
  * Constraints:
  *
