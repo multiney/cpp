@@ -30,7 +30,7 @@ ListNode* removeElements(ListNode *head, int val) {
     delete sentinel;
     return head;
 }
-ListNode* removeElements2(ListNode *head, int val) {
+ListNode* removeElements2(ListNode *head, int val) { // __FIRST__
     if (!head) return nullptr;
     head->next = removeElements2(head->next, val);
     return head->val == val ? head->next : head;
@@ -41,13 +41,6 @@ ListNode* removeElements2(ListNode *head, int val) {
  */
 class MyLinkedList {
 public:
-    struct LinkedNode {
-        int val;
-        LinkedNode* next;
-        LinkedNode(int val) : val(val), next(nullptr) {}
-        LinkedNode(int val, LinkedNode *next) : val(val), next(next) {}
-    };
-
     MyLinkedList() {
         sentinel_ = new LinkedNode(0);
         size_ = 0;
@@ -82,8 +75,7 @@ public:
         LinkedNode *p = sentinel_;
         while (index--)
             p = p->next;
-        LinkedNode *node = new LinkedNode(val, p->next);
-        p->next = node;
+        p->next = new LinkedNode(val, p->next);
         ++size_;
     }
     
@@ -100,6 +92,12 @@ public:
     }
 
 private:
+    struct LinkedNode {
+        int val;
+        LinkedNode* next;
+        LinkedNode(int val) : val(val), next(nullptr) {}
+        LinkedNode(int val, LinkedNode *next) : val(val), next(next) {}
+    };
     int size_;
     LinkedNode *sentinel_;
 };
@@ -117,7 +115,7 @@ ListNode* reverseList(ListNode *head) {
     }
     return prev;
 }
-ListNode* reverse(ListNode *prev, ListNode *curr) {
+ListNode* reverse(ListNode *prev, ListNode *curr) { // __FIRST__
     if (!curr) return prev;
     ListNode *tmp = curr->next;
     curr->next = prev;
