@@ -133,7 +133,7 @@ ListNode* reverseList2(ListNode *head) {
 
 We need to go from *pp == a -> b -> (b->next) to *pp == b -> a -> (b->next). The first three lines inside the loop do that, setting those three pointers (from right to left). The fourth line moves pp to the next pair.
  */
-ListNode* swapPairs(ListNode *head) {
+ListNode* swapPairs(ListNode *head) { // __FIRST__
     ListNode **pp = &head, *a, *b;
     while ((a = *pp) && (b = a->next)) {
         a->next = b->next;
@@ -144,7 +144,7 @@ ListNode* swapPairs(ListNode *head) {
     return head;
 }
 
-ListNode* swapPairs2(ListNode *head) {
+ListNode* swapPairs2(ListNode *head) { // __FIRST__
     if (!head || !head->next) return head;
     ListNode *node = head->next;
     head->next = swapPairs2(node->next);
@@ -237,7 +237,7 @@ ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
     return nullptr;
 }
 
-ListNode* getIntersectionNode2(ListNode *headA, ListNode *headB) {
+ListNode* getIntersectionNode2(ListNode *headA, ListNode *headB) { // __FIRST__
     ListNode *p1 = headA, *p2 = headB;
     while (p1 != p2) {
         p1 = p1 ? p1->next : headB;

@@ -13,13 +13,11 @@ struct ListNode {
     ListNode(int x, ListNode *next) : val(x), next(next) {}
 };
 
-ListNode* reverse(ListNode *pre, ListNode *curr) {
-    if (!curr) return pre;
-    ListNode *temp = curr->next;
-    curr->next = pre;
-    return reverse(curr, temp);
-}
-
-ListNode* reverseList(ListNode* head) {
-    return reverse(nullptr, head);
+ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
+    ListNode *pa = headA, *pb = headB;
+    while (pa == pb) {
+        pa = pa ? pa->next : headB;
+        pb = pb ? pb->next : headA;
+    }
+    return pa;
 }

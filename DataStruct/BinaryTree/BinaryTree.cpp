@@ -1016,6 +1016,131 @@ TreeNode* constructMaximumBinaryTree(vector<int>& nums) {
     return constructMaximumBinaryTreeHelper(nums, 0, nums.size());
 }
 
+/**
+ * 617. Merge Two Binary Trees
+ * 
+ * Constraints:
+ * The number of nodes in both trees is in the range [0, 2000].
+ * -104 <= Node.val <= 104
+ */
+TreeNode* mergeTrees(TreeNode* root1, TreeNode* root2) {
+    if (!root1) return root2;
+    if (!root2) return root1;
+    root1->val += root2->val;
+    root1->left = mergeTrees(root1->left, root2->left);
+    root1->right = mergeTrees(root1->right, root2->right);
+    return root1;
+}
+
+/*
+TreeNode* mergeTrees2(TreeNode* root1, TreeNode* root2) { TODO: figure out it
+    stack<TreeNode*> stk;
+    TreeNode *curr1 = root1, *curr2 = root2;
+    while (curr1 || !stk.empty()) {
+        if (!curr1->left) {
+            
+        }
+        if (curr1) {
+            
+        }
+    }
+}
+*/
+
+TreeNode* mergeTrees2(TreeNode* t1, TreeNode* t2) {
+    if (t1 == NULL) return t2;
+    if (t2 == NULL) return t1;
+    queue<TreeNode*> que;
+    que.push(t1);
+    que.push(t2);
+    while(!que.empty()) {
+        TreeNode* node1 = que.front(); que.pop();
+        TreeNode* node2 = que.front(); que.pop();
+        // 此时两个节点一定不为空，val相加
+        node1->val += node2->val;
+
+        // 如果两棵树左节点都不为空，加入队列
+        if (node1->left != NULL && node2->left != NULL) {
+            que.push(node1->left);
+            que.push(node2->left);
+        }
+        // 如果两棵树右节点都不为空，加入队列
+        if (node1->right != NULL && node2->right != NULL) {
+            que.push(node1->right);
+            que.push(node2->right);
+        }
+
+        // 当t1的左节点 为空 t2左节点不为空，就赋值过去
+        if (node1->left == NULL && node2->left != NULL) {
+            node1->left = node2->left;
+        }
+        // 当t1的右节点 为空 t2右节点不为空，就赋值过去
+        if (node1->right == NULL && node2->right != NULL) {
+            node1->right = node2->right;
+        }
+    }
+    return t1;
+}
+
+/**
+ * 700. Search in a Binary Search Tree
+ *
+ * Constraints:
+ * The number of nodes in the tree is in the range [1, 5000].
+ * 1 <= Node.val <= 107
+ * root is a binary search tree.
+ * 1 <= val <= 107
+ */
+TreeNode* searchBST(TreeNode* root, int val) {
+    if (!root) return nullptr;
+    if (root->val > val) return searchBST(root->left, val);
+    if (root->val < val) return searchBST(root->right, val);
+    return root;
+}
+
+TreeNode* searchBST2(TreeNode *root, int val) {
+    while (root) {
+        if (root->val > val) root = root->left;
+        else if (root->val < val) root = root->right;
+        else return root;
+    }
+    return nullptr;
+}
+
+/**
+ * 98. Validate Binary Search Tree
+ *
+ * Constraints:
+ * The number of nodes in the tree is in the range [1, 104].
+ * -231 <= Node.val <= 231 - 1
+ */
+TreeNode *pre = nullptr;
+bool isValidBST(TreeNode* root) {
+    if (!root) return true;
+    bool left = isValidBST(root->left);
+    if (pre != nullptr && pre->val >= root->val) return false;
+    pre = root;
+    bool right = isValidBST(root->right);
+    return left && right;
+}
+
+bool isValidBST2(TreeNode *root) {
+    stack<TreeNode*> stk;
+    TreeNode *pre = nullptr;
+    while (root || !stk.empty()) {
+        if (root) {
+            stk.push(root);
+            root = root->left;
+        } else {
+            root = stk.top();
+            stk.pop();
+            if (pre && pre->val >= root->val) return false;
+            pre = root;
+            root = root->right;
+        }
+    }
+    return true;
+}
 
 int main (int argc, char *argv[])
 {
