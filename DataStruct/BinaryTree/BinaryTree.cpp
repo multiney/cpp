@@ -1142,11 +1142,101 @@ bool isValidBST2(TreeNode *root) {
     return true;
 }
 
+/**
+ * 530. Minimum Absolute Difference in BST
+ * 
+ * Constraints:
+ * The number of nodes in the tree is in the range [2, 104].
+ * 0 <= Node.val <= 105
+ */
+int minDifference = INT_MAX;
+TreeNode *preNode = nullptr;
+int getMinimumDifference(TreeNode* root) {
+    if (!root) return 0;
+    getMinimumDifference(root->left);
+    if (preNode) minDifference = std::min(minDifference, root->val - preNode->val);
+    preNode = root;
+    getMinimumDifference(root->right);
+    return minDifference;
+}
+
+int getMinimumDifference2(TreeNode *root) {
+    stack<TreeNode*> stk;
+    TreeNode *preNode = nullptr;
+    int ret = INT_MAX;
+    while (root || !stk.empty()) {
+        if (root) {
+            stk.push(root);
+            root = root->left;
+        } else {
+            root = stk.top();
+            stk.pop();
+            if (preNode) ret = std::min(ret, root->val - preNode->val);
+            preNode = root;
+            root = root->right;
+        }
+    }
+    return ret;
+}
+
+/**
+ * 501. Find Mode in Binary Search Tree
+ * 
+ * Constraints:
+ * The number of nodes in the tree is in the range [1, 104].
+ * -105 <= Node.val <= 105
+ */
+vector<int> findModeRet;
+int findModeMaxCount = 0, findModeCount = 0;
+TreeNode *findModePre = nullptr;
+void findModeTraversal(TreeNode *root) {
+    if (!root) return;
+    findModeTraversal(root->left);
+    if (!findModePre || root->val != findModePre->val)
+        findModeCount = 1;
+    else
+        ++findModeCount;
+    findModePre = root;
+    if (findModeCount == findModeMaxCount)
+        findModeRet.push_back(root->val);
+    if (findModeCount > findModeMaxCount) {
+        findModeRet.clear();
+        findModeRet.push_back(root->val);
+        findModeMaxCount = findModeCount;
+    }
+    findModeTraversal(root->right);
+}
+
+vector<int> findMode(TreeNode* root) {
+    findModeTraversal(root);
+    return findModeRet;
+}
+
+/**
+ * 236. Lowest Common Ancestor of a Binary Tree
+ *
+ * Constraints:
+ * The number of nodes in the tree is in the range [2, 105].
+ * -109 <= Node.val <= 109
+ * All Node.val are unique.
+ * p != q
+ * p and q will exist in the tree.
+ */
+TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+    if (!root || root == p || root == q) return root;
+    TreeNode *left = lowestCommonAncestor(root->left, p, q);
+    TreeNode *right = lowestCommonAncestor(root->right, p, q);
+    if (left && right) return root;
+    if (left) return left;
+    return right;
+}
+
 int main (int argc, char *argv[])
 {
     TreeNode *root = new TreeNode(4, new TreeNode(2, new TreeNode(1), new TreeNode(3)), new TreeNode(7, new TreeNode(6), new TreeNode(9)));
     TreeNode *node = new TreeNode(3, new TreeNode(9), new TreeNode(20, new TreeNode(15), new TreeNode(7)));
-    sumOfLeftLeaves2(node);
+    TreeNode *nodeForFindMode = new TreeNode(1, nullptr, new TreeNode(2, new TreeNode(2), nullptr));
+    findMode(nodeForFindMode);
     return 0;
 }
 
