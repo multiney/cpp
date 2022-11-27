@@ -1231,12 +1231,181 @@ TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
     return right;
 }
 
+/**
+ * 235. Lowest Common Ancestor of a Binary Search Tree
+ *
+ * Constraints:
+ * The number of nodes in the tree is in the range [2, 105].
+ * -109 <= Node.val <= 109
+ * All Node.val are unique.
+ * p != q
+ * p and q will exist in the BST.
+ */
+TreeNode* lowestCommonAncestor2(TreeNode* root, TreeNode* p, TreeNode* q) {
+    if (root->val > p->val && root->val > q->val)
+        return lowestCommonAncestor2(root->left, p, q);
+    if (root->val < p->val && root->val < q->val)
+        return lowestCommonAncestor2(root->right, p, q);
+    return root;
+}
+
+TreeNode* lowestCommonAncestor3(TreeNode* root, TreeNode* p, TreeNode* q) {
+    while (true) {
+        if (root->val > p->val && root->val > q->val) root = root->left;
+        else if (root->val < p->val && root->val < q->val) root = root->right;
+        else return root;
+    }
+    return nullptr;
+}
+
+/**
+ * 701. Insert into a Binary Search Tree
+ *
+ * Constraints:
+ * The number of nodes in the tree will be in the range [0, 104].
+ * -108 <= Node.val <= 108
+ * All the values Node.val are unique.
+ * -108 <= val <= 108
+ * It's guaranteed that val does not exist in the original BST.
+ */
+TreeNode *insertIntoBSTPre = nullptr;
+void insertIntoBSTHelper(TreeNode *root, int val) {
+    if (!root) {
+        if (insertIntoBSTPre->val > val)
+            insertIntoBSTPre->left = new TreeNode(val);
+        else
+            insertIntoBSTPre->right = new TreeNode(val);
+        return;
+    }
+    insertIntoBSTPre = root;
+    if (root->val > val) insertIntoBSTHelper(root->left, val);
+    else insertIntoBSTHelper(root->right, val);
+}
+TreeNode* insertIntoBST(TreeNode* root, int val) {
+    if (!root) return new TreeNode(val);
+    insertIntoBSTHelper(root, val);
+    return root;
+}
+
+TreeNode* insertIntoBST2(TreeNode* root, int val) {
+    if (!root) return new TreeNode(val);
+    TreeNode *curr = root, *pre;
+    while (curr) {
+        pre = curr;
+        if (curr->val > val) curr = curr->left;
+        else curr = curr->right;
+    }
+    if (pre->val > val) pre->left = new TreeNode(val);
+    else pre->right = new TreeNode(val);
+    return root;
+}
+
+/**
+ * 450. Delete Node in a BST
+ *
+ * Constraints:
+ * The number of nodes in the tree is in the range [0, 104].
+ * -105 <= Node.val <= 105
+ * Each node has a unique value.
+ * root is a valid binary search tree.
+ * -105 <= key <= 105
+ */
+TreeNode* deleteNode(TreeNode* root, int key) {
+    if (!root) return nullptr;
+    if (root->val == key) {
+        if (!root->left && !root->right) {
+            delete root;
+            return nullptr;
+        } else if (!root->left) {
+            TreeNode *temp = root->right;
+            delete root;
+            return temp;
+        } else if (!root->right) {
+            TreeNode *temp = root->left;
+            delete root;
+            return temp;
+        } else {
+            TreeNode *curr = root->left;
+            while (curr->right)
+                curr = curr->right;
+            TreeNode *temp = root;
+            curr->right = root->right;
+            root = root->left;
+            delete temp;
+            return root;
+        }
+    }
+    if (root->val > key) root->left = deleteNode(root->left, key);
+    else root->right = deleteNode(root->right, key);
+    return root;
+}
+
+TreeNode* deleteTargetNode(TreeNode *target) {
+    TreeNode *temp = target;
+    if (!target->left) {
+        target = target->right;
+        delete temp;
+        return target;
+    }
+    TreeNode *node = target->left;
+    while (node->right) node = node->right;
+    node->right = target->right;
+    target = target->left;
+    delete temp;
+    return target;
+}
+
+TreeNode *deleteNode2(TreeNode *root, int key) {
+    if (!root) return nullptr;
+    TreeNode *curr = root, *pre = nullptr;
+    while (curr) {
+        if (curr->val == key) break;
+        pre = curr;
+        if (curr->val > key) curr = curr->left;
+        else curr = curr->right;
+    }
+    if (!pre)
+        return deleteTargetNode(curr);
+    if (pre->left && pre->left->val == key)
+        pre->left = deleteTargetNode(curr);
+    else if (pre->right && pre->right->val == key)
+        pre->right = deleteTargetNode(curr);
+    return root;
+}
+
+TreeNode* deleteNode3(TreeNode* root, int key) {
+    if (!root) return nullptr;
+    if (root->val == key) {
+        if (!root->left) {
+            TreeNode *temp = root;
+            root = root->right;
+            delete temp;
+            return root;
+        }
+        TreeNode *curr = root->left;
+        while (curr->right) curr = curr->right;
+        std::swap(root->val, curr->val);
+    }
+    root->left = deleteNode3(root->left, key);
+    root->right = deleteNode3(root->right, key);
+    return root;
+}
+
 int main (int argc, char *argv[])
 {
     TreeNode *root = new TreeNode(4, new TreeNode(2, new TreeNode(1), new TreeNode(3)), new TreeNode(7, new TreeNode(6), new TreeNode(9)));
     TreeNode *node = new TreeNode(3, new TreeNode(9), new TreeNode(20, new TreeNode(15), new TreeNode(7)));
     TreeNode *nodeForFindMode = new TreeNode(1, nullptr, new TreeNode(2, new TreeNode(2), nullptr));
-    findMode(nodeForFindMode);
+    TreeNode *nodeForDeleteNode = new TreeNode (5, new TreeNode(3, new TreeNode(2), new TreeNode(4)), new TreeNode(6, nullptr, new TreeNode(7)));
+    auto vec1 = preorderTraversal(nodeForDeleteNode);
+    for (int i : vec1)
+        cout << i << " ";
+    cout << endl;
+    deleteNode2(nodeForDeleteNode, 3);
+    auto vec = preorderTraversal(nodeForDeleteNode);
+    for (int i : vec)
+        cout << i << " ";
+    cout << endl;
     return 0;
 }
 

@@ -1,8 +1,13 @@
+#include <cstring>
+#include <cmath>
+#include <iostream>
 #include <vector>
 #include <string>
 #include <climits>
 #include <algorithm>
 #include <unordered_map>
+#include <set>
+#include <unordered_set>
 using namespace std;
 
 struct ListNode {
@@ -13,11 +18,15 @@ struct ListNode {
     ListNode(int x, ListNode *next) : val(x), next(next) {}
 };
 
-ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
-    ListNode *pa = headA, *pb = headB;
-    while (pa == pb) {
-        pa = pa ? pa->next : headB;
-        pb = pb ? pb->next : headA;
-    }
-    return pa;
+int fourSumCount(vector<int>& nums1, vector<int>& nums2, vector<int>& nums3, vector<int>& nums4) {
+    int ret = 0;
+    std::unordered_map<int, int> map;
+    for (int i : nums1)
+        for (int j : nums2)
+            ++map[i + j];
+    for (int i : nums3)
+        for (int j : nums4)
+            if (map.find(-(i + j)) != map.end())
+                ret += map[-(i + j)];
+    return ret;
 }

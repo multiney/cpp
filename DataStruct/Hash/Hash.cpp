@@ -19,7 +19,7 @@ using std::endl;
  * -----------------------------------------------
  */
 /*
- * 242. Valid Anagram
+ * 242. Valid Anagram 1
  *
  * Constraints:
  *
@@ -45,7 +45,7 @@ bool isAnagram(string s, string t) {
  */
 
 /*
- * 1002. Find Common Characters
+ * 1002. Find Common Characters 2
  *
  * Constraints:
  *
@@ -71,7 +71,7 @@ vector<string> commonChars(vector<string> &words) {
 }
 
 /*
- * 349. Intersection of Two Arrays
+ * 349. Intersection of Two Arrays 3
  * TODO: 350
  * Constraints:
  *
@@ -89,7 +89,7 @@ vector<int> intersection(vector<int> &nums1, vector<int> &nums2) {
     return ret;
 }
 
-vector<int> intersection2(vector<int> &nums1, vector<int> &nums2) {// recommended
+vector<int> intersection2(vector<int> &nums1, vector<int> &nums2) {// __RECOMMENDED__
     std::unordered_set<int> nums_set(nums1.begin(), nums1.end());
     vector<int> ret;
     for (int num : nums2)
@@ -99,7 +99,7 @@ vector<int> intersection2(vector<int> &nums1, vector<int> &nums2) {// recommende
 }
 
 /*
- * 202. Happy Number
+ * 202. Happy Number 4
  *
  * Constraints:
  * 1 <= n <= 231 - 1
@@ -148,7 +148,7 @@ bool isHappy2(int n) {// no need to grap
 }
 
 /*
- * 1. Two Sum
+ * 1. Two Sum 5
  * Constraints:
  * 2 <= nums.length <= 104
  * -109 <= nums[i] <= 109
@@ -165,7 +165,7 @@ vector<int> twoSum(vector<int> &nums, int target) {
 }
 
 /*
- * 454. 4Sum II
+ * 454. 4Sum II 6
  *
  * Constraints:
  * n == nums1.length
@@ -175,7 +175,7 @@ vector<int> twoSum(vector<int> &nums, int target) {
  * 1 <= n <= 200
  * -228 <= nums1[i], nums2[i], nums3[i], nums4[i] <= 228
  */
-int fourSumCount(vector<int>& nums1, vector<int>& nums2, vector<int>& nums3, vector<int>& nums4) {
+int fourSumCount(vector<int>& nums1, vector<int>& nums2, vector<int>& nums3, vector<int>& nums4) { // __FIRST__
     std::unordered_map<int, int> sum_map;
     for (auto i : nums1)
         for (auto j : nums2)
@@ -191,7 +191,7 @@ int fourSumCount(vector<int>& nums1, vector<int>& nums2, vector<int>& nums3, vec
 }
 
 /*
- * 383. Ransom Note
+ * 383. Ransom Note 7
  *
  * Constraints:
  * 1 <= ransomNote.length, magazine.length <= 105
@@ -211,7 +211,7 @@ bool canConstruct(string ransomNote, string magazine) {
 }
 
 /*
- * 15. 3Sum
+ * 15. 3Sum 8
  *
  * Constraints:
  * 3 <= nums.length <= 3000
@@ -243,7 +243,7 @@ vector<vector<int>> threeSum(vector<int>& nums) {
 }
 
 /*
- * 18. 4Sum
+ * 18. 4Sum 9
  *
  * Constraints:
  * 1 <= nums.length <= 200

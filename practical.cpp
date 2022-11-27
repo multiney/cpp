@@ -8,7 +8,7 @@
 using std::string;
 
 void operateFile() {
-    std::ifstream input("../../vk/ccpp/DataStruct/LinkedList/LinkedList.cpp");
+    std::ifstream input("./DataStruct/Hash/Hash.cpp");
     string line;
     string contents;
     std::regex reg(R"( \d+\. )");
@@ -22,7 +22,7 @@ void operateFile() {
         contents += line;
     }
     input.close();
-    std::ofstream output("../../vk/ccpp/DataStruct/LinkedList/LinkedList.cpp");
+    std::ofstream output("./DataStruct/Hash/Hash.cpp");
     output << contents;
     output.close();
 }
