@@ -3,6 +3,7 @@
 #include <climits>
 #include <queue>
 #include <string>
+#include <sys/types.h>
 
 /**
  * Definition for a binary tree node.
@@ -1388,6 +1389,138 @@ TreeNode* deleteNode3(TreeNode* root, int key) {
     }
     root->left = deleteNode3(root->left, key);
     root->right = deleteNode3(root->right, key);
+    return root;
+}
+
+/**
+ * 669. Trim a Binary Search Tree
+ * 
+ * Constraints:
+ * The number of nodes in the tree is in the range [1, 104].
+ * 0 <= Node.val <= 104
+ * The value of each node in the tree is unique.
+ * root is guaranteed to be a valid binary search tree.
+ * 0 <= low <= high <= 104
+ */
+TreeNode* trimBST(TreeNode* root, int low, int high) {
+    if (!root) return nullptr;
+    if (root->val < low) return trimBST(root->right, low, high);
+    if (root->val > high) return trimBST(root->left, low, high);
+    root->left = trimBST(root->left, low, high);
+    root->right = trimBST(root->right, low, high);
+    return root;
+}
+
+TreeNode* trimBST2(TreeNode* root, int low, int high) {
+    while (root) {
+        if (root->val < low) root = root->right;
+        else if (root->val > high) root = root->left;
+        else break;
+    }
+    if (!root) return nullptr;
+    TreeNode *curr = root;
+    while (curr) {
+        while (curr->left && curr->left->val < low)
+            curr->left = curr->left->right;
+        curr = curr->left;
+    }
+    curr = root;
+    while (curr) {
+        while (curr->right && curr->right->val > high)
+            curr->right = curr->right->left;
+        curr = curr->right;
+    }
+    return root;
+}
+
+/**
+ * 108. Convert Sorted Array to Binary Search Tree
+ * 
+ * Constraints:
+ * 1 <= nums.length <= 104
+ * -104 <= nums[i] <= 104
+ * nums is sorted in a strictly increasing order.
+ */
+TreeNode* sortedArrayToBSTHelper(vector<int>& nums, int beg, int end) {
+    if (beg == end) return nullptr;
+    int mid = beg + ((end - beg) >> 1);
+    TreeNode *node = new TreeNode(nums[mid]);
+    node->left = sortedArrayToBSTHelper(nums, beg, mid);
+    node->right = sortedArrayToBSTHelper(nums, mid + 1, end);
+    return node;
+}
+TreeNode* sortedArrayToBST(vector<int>& nums) {
+    return sortedArrayToBSTHelper(nums, 0, nums.size());
+}
+
+TreeNode* sortedArrayToBST2(vector<int>& nums) {
+    queue<TreeNode*> nodeQue;
+    queue<int> indexQue;
+    TreeNode* root = new TreeNode(0);
+    nodeQue.push(root);
+    indexQue.push(0);
+    indexQue.push(nums.size() - 1);
+    while (!nodeQue.empty()) {
+        TreeNode *node = nodeQue.front(); nodeQue.pop();
+        int left = indexQue.front(); indexQue.pop();
+        int right = indexQue.front(); indexQue.pop();
+        int mid = left + ((right - left) >> 1);
+        node->val = nums[mid];
+        if (left <= mid - 1) {
+            node->left = new TreeNode(0);
+            nodeQue.push(node->left);
+            indexQue.push(left);
+            indexQue.push(mid - 1);
+        }
+        if (right >= mid + 1) {
+            node->right = new TreeNode(0);
+            nodeQue.push(node->right);
+            indexQue.push(mid + 1);
+            indexQue.push(right);
+        }
+    }
+    return root;
+}
+
+/**
+ * 538. Convert BST to Greater Tree
+ * 
+ * Constraints:
+ * The number of nodes in the tree is in the range [0, 104].
+ * -104 <= Node.val <= 104
+ * All the values in the tree are unique.
+ * root is guaranteed to be a valid binary search tree.
+ */
+TreeNode *convertBSTPre = nullptr;
+void convertBSTTraversal(TreeNode* curr) {
+    if (!curr) return;
+    convertBSTTraversal(curr->right);
+    if (convertBSTPre) curr->val += convertBSTPre->val;
+    convertBSTPre = curr;
+    convertBSTTraversal(curr->left);
+}
+TreeNode* convertBST(TreeNode* root) {
+    convertBSTTraversal(root);
+    return root;
+}
+
+
+TreeNode* convertBST2(TreeNode* root) {
+    int pre = 0;
+    stack<TreeNode*> stk;
+    TreeNode *curr = root;
+    while (curr || !stk.empty()) {
+        if (curr) {
+            stk.push(curr);
+            curr = curr->right;
+        } else {
+            curr = stk.top();
+            stk.pop();
+            curr->val += pre;
+            pre = curr->val;
+            curr = curr->left;
+        }
+    }
     return root;
 }
 
