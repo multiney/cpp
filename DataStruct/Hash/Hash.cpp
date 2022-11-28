@@ -197,7 +197,7 @@ int fourSumCount(vector<int>& nums1, vector<int>& nums2, vector<int>& nums3, vec
  * 1 <= ransomNote.length, magazine.length <= 105
  * ransomNote and magazine consist of lowercase English letters.
  */
-bool canConstruct(string ransomNote, string magazine) {
+bool canConstruct(string ransomNote, string magazine) { // __FIRST__
     int hash[26] = {0};
     for (auto c : magazine)
         ++hash[c - 'a'];
@@ -217,7 +217,7 @@ bool canConstruct(string ransomNote, string magazine) {
  * 3 <= nums.length <= 3000
  *-105 <= nums[i] <= 105
  */
-vector<vector<int>> threeSum(vector<int>& nums) {
+vector<vector<int>> threeSum(vector<int>& nums) { // __FIRST__
     vector<vector<int>> ret;
     std::sort(nums.begin(), nums.end());
     for (int i = 0; i < nums.size(); ++i) {
@@ -231,11 +231,9 @@ vector<vector<int>> threeSum(vector<int>& nums) {
             if (nums[i] + nums[left] + nums[right] > 0) --right;
             else if (nums[i] + nums[left] + nums[right] < 0) ++left;
             else {
-                while (left < right && nums[right] == nums[right - 1]) --right;
-                while (left < right && nums[left] == nums[left + 1]) ++left;
                 ret.push_back({nums[i], nums[left], nums[right]});
-                --right;
-                ++left;
+                do { --right; } while (left < right && nums[right] == nums[right - 1]);
+                do { ++left; } while (left < right && nums[left] == nums[left + 1]);
             }
         }
     }
@@ -250,7 +248,7 @@ vector<vector<int>> threeSum(vector<int>& nums) {
  * -109 <= nums[i] <= 109
  * -109 <= target <= 109
  */
-vector<vector<int>> fourSum(vector<int>& nums, int target) {
+vector<vector<int>> fourSum(vector<int>& nums, int target) { // __FIRST__
     vector<vector<int>> ret;
     if (nums.size() < 4) return ret;
     int n = nums.size();
