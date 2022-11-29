@@ -1,5 +1,6 @@
 #include <cstring>
 #include <cmath>
+#include <ios>
 #include <iostream>
 #include <vector>
 #include <string>
@@ -18,15 +19,33 @@ struct ListNode {
     ListNode(int x, ListNode *next) : val(x), next(next) {}
 };
 
-int fourSumCount(vector<int>& nums1, vector<int>& nums2, vector<int>& nums3, vector<int>& nums4) {
-    int ret = 0;
-    std::unordered_map<int, int> map;
-    for (int i : nums1)
-        for (int j : nums2)
-            ++map[i + j];
-    for (int i : nums3)
-        for (int j : nums4)
-            if (map.find(-(i + j)) != map.end())
-                ret += map[-(i + j)];
+vector<vector<int>> fourSum(vector<int>& nums, int target) {
+    if (nums.size() < 4) return {};
+    vector<vector<int>> ret;
+    std::sort(nums.begin(), nums.end());
+    for (int i = 0; i < nums.size() - 3; ++i) {
+        if (i > 0 && nums[i - 1] == nums[i]) continue;
+        if (nums[i] + nums[i + 1] + nums[i + 2] + nums[i + 3] > target) break;
+        if (nums[i] + nums[nums.size() - 3] + nums[nums.size() - 2] + nums[nums.size() - 1] < target) break;
+        for (int j = i + 1; j < nums.size() - 2; ++j) {
+            if (j > i + 2 && nums[j] == nums[j - 1]) continue;
+            if (nums[i] + nums[j] + nums[j + 1] + nums[j + 2] > target) break;
+            if (nums[i] + nums[j] + nums[nums.size() - 2] + nums[nums.size() - 1] < target) break;
+            int left = j + 1;
+            int right = nums.size() - 1;
+            while (left < right) {
+                long sum = nums[i] + nums[j] + nums[left] + nums[right];
+                if (sum > target) --right;
+                else if (sum < target) ++left;
+                else {
+                    while (left < right && nums[left] == nums[left + 1]) ++left;
+                    while (left < right && nums[right] == nums[right - 1]) --right;
+                    ret.push_back({nums[i], nums[j], nums[left], nums[right]});
+                    ++left;
+                    --right;
+                }
+            }
+        }
+    }
     return ret;
 }
