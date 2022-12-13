@@ -6,7 +6,7 @@ using std::vector;
 using std::string;
 
 /*
- * 344. Reverse String
+ * 344. Reverse String 1
  *
  * Constraints:
  * 1 <= s.length <= 105
@@ -18,7 +18,7 @@ void reverseString(vector<char> &s) {
 }
 
 /*
- * 541. Reverse String II
+ * 541. Reverse String II 2
  *
  * Constraints:
  * 1 <= s.length <= 104
@@ -33,7 +33,7 @@ string reverseStr(string s, int k) {
 }
 
 /*
- * 剑指 Offer 05. 替换空格
+ * 剑指 Offer 05. 替换空格 3
  *
  * Constraints:
  * 0 <= s 的长度 <= 10000
@@ -59,7 +59,7 @@ string replaceSpace(string s) {
 }
 
 /*
- * 151. Reverse Words in a String
+ * 151. Reverse Words in a String 4
  *
  * Constraints:
  * 1 <= s.length <= 104
@@ -83,7 +83,7 @@ void removeExtraSpaces(string &s) {
     s.resize(slow);
 }
 
-string reverseWords(string s) {
+string reverseWords(string s) { // __FIRST__
     removeExtraSpaces(s);
     reverse(s, 0, s.size() - 1);
     int start = 0;
@@ -113,7 +113,7 @@ string reverseLeftWords2(string s, int n) {
 }
 
 /*
- * 28. Find the Index of the First Occurrence in a String
+ * 28. Find the Index of the First Occurrence in a String 5
  *
  * Constraints:
  * 1 <= haystack.length, needle.length <= 104
@@ -130,7 +130,7 @@ void getNext(int *next, const string &s) {
         next[i] = j;
     }
 }
-int strStr(string haystack, string needle) {
+int strStr(string haystack, string needle) { // __FIRST__
     int next[needle.size()];
     getNext(next, needle);
     for (int i = 0, j = -1; i < haystack.size(); ++i) {
@@ -145,7 +145,7 @@ int strStr(string haystack, string needle) {
 }
 
 /*
- * 459. Repeated Substring Pattern
+ * 459. Repeated Substring Pattern 6
  *
  * Constraints:
  * 1 <= s.length <= 104

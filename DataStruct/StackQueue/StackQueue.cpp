@@ -17,7 +17,7 @@ using std::unordered_map;
 using std::cout;
 using std::endl;
 /*
- * 232. Implement Queue using Stacks
+ * 232. Implement Queue using Stacks 1
  *
  * Constraints:
  * 1 <= x <= 9
@@ -58,7 +58,7 @@ public:
 };
 
 /*
- * 225. Implement Stack using Queues
+ * 225. Implement Stack using Queues 2
  *
  * Constraints:
  * 1 <= x <= 9
@@ -109,7 +109,7 @@ public:
 };
 
 /*
- * 20. Valid Parentheses
+ * 20. Valid Parentheses 3
  *
  * Constraints:
  * 1 <= s.length <= 104
@@ -128,7 +128,7 @@ bool isValid(string s) {
 }
 
 /*
- * 1047. Remove All Adjacent Duplicates In String
+ * 1047. Remove All Adjacent Duplicates In String 4
  *
  * Constraints:
  * 1 <= s.length <= 105
@@ -146,7 +146,7 @@ string removeDuplicates(string s) {
 }
 
 /*
- * 150. Evaluate Reverse Polish Notation
+ * 150. Evaluate Reverse Polish Notation 5
  *
  * Constraints:
  * 1 <= tokens.length <= 104
@@ -170,7 +170,7 @@ int evalRPN(vector<string>& tokens) {
 }
 
 /*
- * 239. Sliding Window Maximum
+ * 239. Sliding Window Maximum 6
  *
  * Constraints:
  * 1 <= nums.length <= 105
@@ -228,7 +228,7 @@ vector<int> maxSlidingWindow2(vector<int> &nums, int k ) {
 }
 
 /**
- * 347. Top K Frequent Elements
+ * 347. Top K Frequent Elements 7
  * 
  * Constraints:
  * 1 <= nums.length <= 105
